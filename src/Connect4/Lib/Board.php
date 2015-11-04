@@ -196,46 +196,6 @@ class Board
     }
     
     /**
-     * @param Column $columnOfTopCell
-     * @return array
-     */
-    public function getForwardDiagonalContents(Column $columnOfTopCell)
-    {
-        $set = [];
-        $x = $columnOfTopCell->getValue();
-        $y = Row::MAX;
-        while ($y >= Row::MIN && $x >= Column::MIN) {
-            $column = new Column($x);
-            $row = new Row($y);
-            $set[] = $this->getContentsOfCell($column, $row);
-            $x--;
-            $y--;
-        }
-        
-        return $set;
-    }
-    
-    /**
-     * @param Column $columnOfTopCell
-     * @return array
-     */
-    public function getBackwardDiagonalContents(Column $columnOfTopCell)
-    {
-        $set = [];
-        $x = $columnOfTopCell->getValue();
-        $y = Row::MAX;
-        while ($y <= Row::MAX && $x <= Column::MAX) {
-            $column = new Column($x);
-            $row = new Row($y);
-            $set[] = $this->getContentsOfCell($column, $row);
-            $x++;
-            $y++;
-        }
-        
-        return $set;
-    }
-    
-    /**
      * @return boolean
      */
     private function boardIsFull()
@@ -259,8 +219,6 @@ class Board
         foreach (range(Column::MIN, Column::MAX) as $columnNumber) {
             $column = new Column($columnNumber);
             $sets[] = $this->getColumnContents($column);
-            $sets[] = $this->getBackwardDiagonalContents($column);
-            $sets[] = $this->getForwardDiagonalContents($column);
         }
         
         foreach (range(Row::MIN, Row::MAX) as $rowNumber) {

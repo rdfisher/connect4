@@ -71,6 +71,14 @@ class BoardSpec extends ObjectBehavior
         $boardAfterMoveTwo->getContentsOfCell(new Column(4), new Row(1))->shouldBe($firstMove->getPlayer());
         $boardAfterMoveTwo->getContentsOfCell(new Column(4), new Row(2))->shouldBe($secondMove->getPlayer());
         $boardAfterMoveTwo->getContentsOfCell(new Column(3), new Row(1))->shouldBe(null);
+        $boardAfterMoveTwo->getColumnContents(new Column(4))->shouldBe(array(
+            $firstMove->getPlayer(),
+            $secondMove->getPlayer(), 
+            null, 
+            null, 
+            null,
+            null
+        ));
     }
     
     function it_rejects_a_move_in_a_full_column()
@@ -99,6 +107,15 @@ class BoardSpec extends ObjectBehavior
         $boardAfterMoveTwo->getContentsOfCell(new Column(4), new Row(1))->shouldBe($firstMove->getPlayer());
         $boardAfterMoveTwo->getContentsOfCell(new Column(4), new Row(2))->shouldBe(null);
         $boardAfterMoveTwo->getContentsOfCell(new Column(3), new Row(1))->shouldBe($secondMove->getPlayer());
+        $boardAfterMoveTwo->getRowContents(new Row(1))->shouldBe(array(
+            null, 
+            null, 
+            $secondMove->getPlayer(), 
+            $firstMove->getPlayer(),
+            null,
+            null,
+            null
+        ));
     }
     
     /**
