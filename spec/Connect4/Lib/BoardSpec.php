@@ -79,6 +79,9 @@ class BoardSpec extends ObjectBehavior
             null,
             null
         ));
+        $this->getTranscript()->shouldBe([]);
+        $boardAfterMoveOne->getTranscript()->shouldBe([$firstMove]);
+        $boardAfterMoveTwo->getTranscript()->shouldBe([$firstMove, $secondMove]);
     }
     
     function it_rejects_a_move_in_a_full_column()

@@ -27,6 +27,11 @@ class Board
     private $cells;
     
     /**
+     * @var Move[]
+     */
+    private $transcript = [];
+    
+    /**
      * @param Player $firstPlayer
      */
     public function __construct(Player $firstPlayer)
@@ -131,6 +136,7 @@ class Board
             $board->state = new GameState(GameState::RED_PLAYS_NEXT);
         }
         
+        $board->transcript[] = $move;
         return $board;
     }
 
@@ -194,6 +200,14 @@ class Board
         }
         
         return null;
+    }
+    
+    /**
+     * @return Move[]
+     */
+    public function getTranscript()
+    {
+        return $this->transcript;
     }
     
     /**
