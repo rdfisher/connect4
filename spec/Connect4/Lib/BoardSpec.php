@@ -118,6 +118,33 @@ class BoardSpec extends ObjectBehavior
         ));
     }
     
+    function it_can_detect_a_vertical_win()
+    {
+        $redMove = $this->getMove(Player::RED, 1);
+        $yellowMove = $this->getMove(Player::YELLOW, 2);
+        
+        $board = $this->applyMove($redMove);
+        
+        for ($i=  0; $i<3; $i++) {
+            $board = $board->applyMove($yellowMove);
+            $board = $board->applyMove($redMove);
+        }
+        $board->getState()->shouldBeLike(new GameState(GameState::RED_WON));
+    }
+    
+    function it_can_detect_a_horizontal_win()
+    {
+        $yellowMove = $this->getMove(Player::YELLOW, 1);
+        
+        $board = $this->applyMove($this->getMove(Player::RED, 1));
+        
+        for ($i=  0; $i<3; $i++) {
+            $board = $board->applyMove($yellowMove);
+            $board = $board->applyMove($this->getMove(Player::RED, $i+2));
+        }
+        $board->getState()->shouldBeLike(new GameState(GameState::RED_WON));
+    }
+    
     /**
      * @param string $playerColour
      * @param integer $columnNumber
