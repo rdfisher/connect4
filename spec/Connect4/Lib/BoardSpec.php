@@ -145,6 +145,66 @@ class BoardSpec extends ObjectBehavior
         $board->getState()->shouldBeLike(new GameState(GameState::RED_WON));
     }
     
+    function it_can_detect_a_forward_diagonal_win()
+    {
+        /**
+         * .......
+         * .......
+         * ...R...
+         * ..RR...
+         * .RYY...
+         * RYYRY..
+         */
+        $moves = [
+            1, 2, 
+            2, 3,
+            4, 3,
+            3, 4,
+            4, 5,
+            4
+        ];
+        
+        $board = $this;
+        
+        foreach ($moves as $i => $columnNumber) {
+            $player = $i % 2 ? new Player(Player::YELLOW) : new Player(Player::RED);
+            $move = new Move($player, new Column($columnNumber));
+            $board = $board->applyMove($move);
+        }
+        
+        $board->getState()->shouldBeLike(new GameState(GameState::RED_WON));
+    }
+    
+    function it_can_detect_a_backward_diagonal_win()
+    {
+        /**
+         * .......
+         * .......
+         * ..R....
+         * ..RR...
+         * ..YYR..
+         * .YROOR.
+         */
+        $moves = [
+            6, 5, 
+            5, 4,
+            3, 4,
+            4, 3,
+            3, 2,
+            3
+        ];
+        
+        $board = $this;
+        
+        foreach ($moves as $i => $columnNumber) {
+            $player = $i % 2 ? new Player(Player::YELLOW) : new Player(Player::RED);
+            $move = new Move($player, new Column($columnNumber));
+            $board = $board->applyMove($move);
+        }
+        
+        $board->getState()->shouldBeLike(new GameState(GameState::RED_WON));
+    }
+    
     /**
      * @param string $playerColour
      * @param integer $columnNumber

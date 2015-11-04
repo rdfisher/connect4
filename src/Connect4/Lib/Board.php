@@ -108,7 +108,7 @@ class Board
         $board = clone($this);
         $board->cells[count($filledCells)][$column->getValue() - 1] = $player;
         
-        if ($board->boardIsFull()) {
+        if ($board->isBoardFull()) {
             $board->state = GameState::DRAW;
             return $board;
         }
@@ -163,29 +163,6 @@ class Board
     }
     
     /**
-     * @param array $cells
-     * @return Player|null
-     */
-    private function getFourInARow(array $cells)
-    {
-        $cells = array_filter($cells);
-        
-        $count = 0;
-        $result = null;
-        
-        foreach ($cells as $cell) {
-            if ($cell == $result) {
-                $count ++;
-            } else {
-                $count = 1;
-                $result = $cell;
-            }
-        }
-        
-        return ($count >= 4) ? $result : null;
-    }
-    
-    /**
      * @param Column $column
      * @return boolean
      */
@@ -196,9 +173,33 @@ class Board
     }
     
     /**
+     * @param array $cells
+     * @return Player|null
+     */
+    private function getFourInARow(array $cells)
+    {
+        $count = 0;
+        $result = null;
+        
+        foreach ($cells as $cell) {
+            if ($cell == $result) {
+                $count ++;
+                if (($count >= 4) && $result) {
+                    return $result;
+                }
+            } else {
+                $count = 1;
+                $result = $cell;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
      * @return boolean
      */
-    private function boardIsFull()
+    private function isBoardFull()
     {
         $count = 0;
         foreach (range(Row::MIN, Row::MAX) as $rowNumber) {
@@ -209,27 +210,107 @@ class Board
     }
     
     /**
-     * 
      * @return Player|null
      */
     private function computeWinner()
     {
-        $sets = [];
+        return $this->checkRows()  || $this->checkColumns() || $this->checkDiagonals();
+    }
+    
+    /**
+     * @param Column $column
+     * @param Row $row
+     * @return array
+     */
+    private function getForwardDiagonalFromCell(Column $column, Row $row)
+    {
+        $x = $column->getValue();
+        $y = $row->getValue();
         
-        foreach (range(Column::MIN, Column::MAX) as $columnNumber) {
-            $column = new Column($columnNumber);
-            $sets[] = $this->getColumnContents($column);
+        $set = [];
+        while ($x <= Column::MAX && $y <= Row::MAX) {
+            $set[] = $this->getContentsOfCell(new Column($x), new Row($y));
+            $y ++;
+            $x ++;
+        }
+        return $set;
+    }
+    
+    /**
+     * @param Column $column
+     * @param Row $row
+     * @return array
+     */
+    private function getBackwardDiagonalFromCell(Column $column, Row $row)
+    {
+        $x = $column->getValue();
+        $y = $row->getValue();
+        
+        $set = [];
+        while ($x >= Column::MIN && $y <= Row::MAX) {
+            $set[] = $this->getContentsOfCell(new Column($x), new Row($y));
+            $y ++;
+            $x --;
         }
         
+        return $set;
+    }
+    
+    /**
+     * @return Player|null
+     */
+    private function checkRows()
+    {
         foreach (range(Row::MIN, Row::MAX) as $rowNumber) {
-            $sets[] = $this->getRowContents(new Row($rowNumber));
+            $row = new Row($rowNumber);
+            $set = $this->getRowContents($row);
+            if ($winner = $this->getFourInARow($set)) {
+                return $winner;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * @return Player|null
+     */
+    private function checkColumns()
+    {
+        foreach (range(Column::MIN, Column::MAX) as $columnNumber) {
+            $column = new Column($columnNumber);
+            $set = $this->getColumnContents($column);
+
+            if ($winner = $this->getFourInARow($set)) {
+                return $winner;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * @return Player|null
+     */
+    private function checkDiagonals()
+    {
+        $sets = [];
+        foreach (range(Row::MIN, Row::MAX) as $rowNumber) {
+            $row = new Row($rowNumber);
+            foreach (range(Column::MIN, Column::MAX) as $columnNumber) {
+                $column = new Column($columnNumber);
+                if (($columnNumber == Column::MIN) || ($rowNumber == Row::MIN)) {
+                    $sets[] = $this->getForwardDiagonalFromCell($column, $row);
+                }
+                if (($columnNumber == Column::MAX) || ($rowNumber == Row::MIN)) {
+                    $sets[] = $this->getBackwardDiagonalFromCell($column, $row);
+                }
+            }
         }
         
         foreach ($sets as $set) {
-            $winningPlayer = $this->getFourInARow($set);
-            
-            if ($winningPlayer) {
-                return $winningPlayer;
+            if ($winner = $this->getFourInARow($set)) {
+                return $winner;
             }
         }
         
