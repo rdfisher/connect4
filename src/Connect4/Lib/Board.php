@@ -54,6 +54,14 @@ class Board
     }
     
     /**
+     * @return Player
+     */
+    public function getFirstPlayer()
+    {
+        return $this->firstPlayer;
+    }
+    
+    /**
      * @return GameState
      */
     public function getState()

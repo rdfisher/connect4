@@ -23,6 +23,11 @@ class BoardSpec extends ObjectBehavior
         $this->shouldHaveType('Connect4\Lib\Board');
     }
     
+    function it_returns_the_first_player()
+    {
+        $this->getFirstPlayer()->shouldBeLike(new Player(Player::RED));
+    }
+    
     function it_returns_an_initial_state()
     {
         $this->getState()->shouldBeLike(new GameState(GameState::RED_PLAYS_NEXT));
