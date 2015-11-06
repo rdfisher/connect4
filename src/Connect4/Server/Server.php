@@ -160,7 +160,8 @@ class Server
         $this->availablePlayers = [
            new Player(Player::RED),
            new Player(Player::YELLOW)
-       ];
+        ];
+        shuffle($this->availablePlayers);
         $this->board = null;
     }
     
@@ -172,25 +173,5 @@ class Server
         $connections = $this->connections;
         shuffle($connections);
         return current($connections);
-    }
-    
-    /**
-     * @param Player $player
-     * @return array
-     */
-    private function getBoardInfo(Player $player)
-    {
-        $transcript = array();
-        
-        foreach ($this->board->getTranscript() as $move) {
-            $transcript[] = array((string)$move->getPlayer(), $move->getColumn()->getValue());
-        }
-        
-        return [
-            'startPlayer' => (string)$this->board->getFirstPlayer(),
-            'state' => (string)$this->board->getState(),
-            'you' => (string)$player,
-            'transcript' => $transcript
-        ];
     }
 }
