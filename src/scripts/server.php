@@ -17,5 +17,5 @@ $socket->on('connection', function ($connection)  use ($server) {
     
 });
 
-$socket->listen(1337);
+$socket->listen(1337, '0.0.0.0');
 $loop->run();
