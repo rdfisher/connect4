@@ -127,7 +127,7 @@ class Board
         }
         
         $winningPlayer = $board->computeWinner();
-            
+        
         if ($winningPlayer == Player::RED) {
             $board->state = GameState::RED_WON;
             return $board;
@@ -236,7 +236,17 @@ class Board
      */
     private function computeWinner()
     {
-        return $this->checkRows()  || $this->checkColumns() || $this->checkDiagonals();
+        if ($winner = $this->checkRows()) {
+            return $winner;
+        }
+        
+        if ($winner = $this->checkColumns()) {
+            return $winner;
+        }
+        
+        if ($winner = $this->checkDiagonals()) {
+            return $winner;
+        }
     }
     
     /**
