@@ -29,7 +29,6 @@ class ServerSpec extends ObjectBehavior
         $result = $this->addSocketConnection($socketConnection, 'foo');
         $result->shouldHaveType('Connect4\Server\Connection');
         $result->getSocketConnection()->shouldBe($socketConnection);
-        $result->getPlayer()->__toString()->shouldBe('yellow');
         $result->getName()->shouldBe('foo');
         $this->getConnections()->shouldBe([$result]);
     }
@@ -42,8 +41,6 @@ class ServerSpec extends ObjectBehavior
         $this->getConnections()->shouldBe([$result1]);
         $result2 = $this->addSocketConnection($socketConnection2, 'bar');
         $this->getConnections()->shouldBe([$result1, $result2]);
-        $result1->getPlayer()->__toString()->shouldBe('yellow');
-        $result2->getPlayer()->__toString()->shouldBe('red');
     }
     
     function it_only_accepts_two_connections(

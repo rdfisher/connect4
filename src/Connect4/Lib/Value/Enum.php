@@ -36,7 +36,7 @@ abstract class Enum implements ScalarValueInterface
         $calledClass = get_called_class();
 
         if (! isset(static::$constants[$calledClass])) {
-            $class                           = new \ReflectionClass($calledClass);
+            $class                          = new \ReflectionClass($calledClass);
             static::$constants[$calledClass] = $class->getConstants();
         }
 
