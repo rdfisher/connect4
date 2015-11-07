@@ -51,7 +51,7 @@ class Connection
     /**
      * @return string
      */
-    function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -59,7 +59,7 @@ class Connection
     /**
      * @param string $name
      */
-    function setName($name)
+    public function setName($name)
     {
         $this->name = (string)$name;
     }

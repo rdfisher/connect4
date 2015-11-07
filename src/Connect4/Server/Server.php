@@ -5,6 +5,8 @@ use Connect4\Lib\Player;
 use Connect4\Lib\Board;
 use Connect4\Lib\Column;
 use Connect4\Lib\Move;
+use Connect4\Server\GameArchive\GameArchiveInterface as GameArchive;
+use Connect4\Server\GameArchive\InMemoryArchive;
 use React\Socket\Connection as SocketConnection;
 
 class Server
@@ -29,9 +31,19 @@ class Server
      */
     private $board;
     
-    public function __construct(LoggerInterface $logger = null)
+    /**
+     * @var GameArchive
+     */
+    private $gameArchive;
+    
+    /**
+     * @param LoggerInterface $logger
+     * @param GameArchive $archive
+     */
+    public function __construct(LoggerInterface $logger = null, GameArchive $archive = null)
     {
        $this->logger = $logger ?: new Logger();
+       $this->gameArchive = $archive ?: new InMemoryArchive();
        $this->reset();
     }
     
@@ -91,6 +103,14 @@ class Server
         $this->board = $board;
     }
 
+    /**
+     * @return GameArchive
+     */
+    public function getGameArchive()
+    {
+        return $this->gameArchive;
+    }
+    
     public function run()
     {
         $startingPlayerConnection = $this->randomlyChooseAConnection();
@@ -100,14 +120,15 @@ class Server
         
         $notify = function() use ($connections, $server) {
             $transcript = array();
-        
-            foreach ($server->getBoard()->getTranscript() as $move) {
+            $board = $server->getBoard();
+            
+            foreach ($board->getTranscript() as $move) {
                 $transcript[] = array((string)$move->getPlayer(), $move->getColumn()->getValue());
             }
 
             foreach ($connections as $connection) {
                 $socket = $connection->getSocketConnection();
-                $board = $server->getBoard();
+                
                 $player = $connection->getPlayer();
                 $data = [
                     'startPlayer' => (string)$board->getFirstPlayer(),
@@ -119,7 +140,21 @@ class Server
             }
         };
         
-        $stopGame = function() use ($server) {
+        $stopGame = function() use ($server, $archive) {
+            $board = $server->getBoard();
+            $redPlayerName = '';
+            $yellowPlayerName = '';
+            
+            foreach ($server->getConnections() as $connection) {
+                if ($connection->getPlayer() == Player::RED) {
+                    $redPlayerName = $connection->getName();
+                }
+                if ($connection->getPlayer() == Player::YELLOW) {
+                    $yellowPlayerName = $connection->getName();
+                }
+            }
+            
+            $server->getGameArchive()->archive($board, $redPlayerName, $yellowPlayerName);
             $server->reset();
         };
         

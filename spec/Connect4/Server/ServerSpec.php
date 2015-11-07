@@ -6,12 +6,13 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use React\Socket\Connection as SocketConnection;
 use Connect4\Server\LoggerInterface as Logger;
+use Connect4\Server\GameArchive\GameArchiveInterface as GameArchive;
 
 class ServerSpec extends ObjectBehavior
 {
-    function let(Logger $logger)
+    function let(Logger $logger, GameArchive $archive)
     {
-        $this->beConstructedWith($logger);
+        $this->beConstructedWith($logger, $archive);
     }
     
     function it_is_initializable()

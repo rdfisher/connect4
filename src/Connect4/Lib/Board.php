@@ -122,19 +122,19 @@ class Board
         $board->cells[count($filledCells)][$column->getValue() - 1] = $player;
         
         if ($board->isBoardFull()) {
-            $board->state = GameState::DRAW;
+            $board->state = new GameState(GameState::DRAW);
             return $board;
         }
         
         $winningPlayer = $board->computeWinner();
         
         if ($winningPlayer == Player::RED) {
-            $board->state = GameState::RED_WON;
+            $board->state = new GameState(GameState::RED_WON);
             return $board;
         } 
         
         if ($winningPlayer == Player::YELLOW) {
-            $board->state = GameState::YELLOW_WON;
+            $board->state = new GameState(GameState::YELLOW_WON);
             return $board;
         }
         
