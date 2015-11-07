@@ -3,7 +3,7 @@ namespace Connect4\Lib\Value;
 
 use InvalidArgumentException;
 
-abstract class BoundedInteger
+abstract class BoundedInteger implements ScalarValueInterface
 {
     /**
      * @var integer

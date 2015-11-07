@@ -3,7 +3,7 @@ namespace Connect4\Lib\Value;
 
 use InvalidArgumentException;
 
-abstract class Enum
+abstract class Enum implements ScalarValueInterface
 {
     /** @var mixed */
     protected $value;
@@ -48,7 +48,7 @@ abstract class Enum
      */
     public function __toString()
     {
-        return (string) $this->value;
+        return $this->getValue();
     }
 
     /**
@@ -60,5 +60,13 @@ abstract class Enum
         unset($constants['__DEFAULT']);
 
         return $constants;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return (string)$this->value;
     }
 }

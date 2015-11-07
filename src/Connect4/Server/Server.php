@@ -105,7 +105,7 @@ class Server
                 $transcript[] = array((string)$move->getPlayer(), $move->getColumn()->getValue());
             }
 
-            foreach ($server->getConnections() as $connection) {
+            foreach ($connections as $connection) {
                 $socket = $connection->getSocketConnection();
                 $board = $server->getBoard();
                 $player = $connection->getPlayer();
@@ -119,7 +119,7 @@ class Server
             }
         };
         
-        $stopGame = function($errorMessage = null) use ($connections, $server) {
+        $stopGame = function() use ($server) {
             $server->reset();
         };
         
@@ -127,7 +127,7 @@ class Server
             $socket = $connection->getSocketConnection();
             $player = $connection->getPlayer();
             
-            $socket->on('data', function($data) use ($socket, $player, $server, $notify, $stopGame) {
+            $socket->on('data', function($data) use ($player, $server, $notify, $stopGame) {
                 $board= $server->getBoard();
                 try {
                     $column = new Column((int)trim($data));

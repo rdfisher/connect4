@@ -26,7 +26,7 @@ $connector->create($serverAddress, 1337)->then(function (React\Stream\Stream $st
     $stream->write($brain->getName());
     $stream->on('data', function($data) use ($stream, $client, $responseInterpreter){
        if (! $data) {
-           die ('CONNECTION TERMINATED' . $data);
+           die ('CONNECTION TERMINATED');
        }
        $response = $responseInterpreter->buildResponse($data);
        $move = $client->handle($response);
