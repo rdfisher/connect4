@@ -119,6 +119,7 @@ class Board
         $filledCells = array_filter($contents);
         
         $board = clone($this);
+        $board->transcript[] = $move;
         $board->cells[count($filledCells)][$column->getValue() - 1] = $player;
         
         if ($board->isBoardFull()) {
@@ -144,7 +145,6 @@ class Board
             $board->state = new GameState(GameState::RED_PLAYS_NEXT);
         }
         
-        $board->transcript[] = $move;
         return $board;
     }
 
