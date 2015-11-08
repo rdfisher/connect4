@@ -190,7 +190,7 @@ class Board
      * @param array $cells
      * @return Player|null
      */
-    private function getFourInARow(array $cells)
+    public function getFourInARow(array $cells)
     {
         $count = 0;
         $result = null;
@@ -221,7 +221,7 @@ class Board
     /**
      * @return boolean
      */
-    private function isBoardFull()
+    public function isBoardFull()
     {
         $count = 0;
         foreach (range(Row::MIN, Row::MAX) as $rowNumber) {
@@ -229,6 +229,49 @@ class Board
             $count += count($contents);
         }
         return ($count == (Row::MAX * Column::MAX));
+    }
+    
+    /**
+     * Return the diagonal starting from the specified cell going up and right
+     * 
+     * @param Column $column
+     * @param Row $row
+     * @return array
+     */
+    public function getForwardDiagonalFromCell(Column $column, Row $row)
+    {
+        $x = $column->getValue();
+        $y = $row->getValue();
+        
+        $set = [];
+        while ($x <= Column::MAX && $y <= Row::MAX) {
+            $set[] = $this->getContentsOfCell(new Column($x), new Row($y));
+            $y ++;
+            $x ++;
+        }
+        return $set;
+    }
+    
+    /**
+     * Return the diagonal starting from the specified cell going up and left
+     * 
+     * @param Column $column
+     * @param Row $row
+     * @return array
+     */
+    public function getBackwardDiagonalFromCell(Column $column, Row $row)
+    {
+        $x = $column->getValue();
+        $y = $row->getValue();
+        
+        $set = [];
+        while ($x >= Column::MIN && $y <= Row::MAX) {
+            $set[] = $this->getContentsOfCell(new Column($x), new Row($y));
+            $y ++;
+            $x --;
+        }
+        
+        return $set;
     }
     
     /**
@@ -247,45 +290,6 @@ class Board
         if ($winner = $this->checkDiagonals()) {
             return $winner;
         }
-    }
-    
-    /**
-     * @param Column $column
-     * @param Row $row
-     * @return array
-     */
-    private function getForwardDiagonalFromCell(Column $column, Row $row)
-    {
-        $x = $column->getValue();
-        $y = $row->getValue();
-        
-        $set = [];
-        while ($x <= Column::MAX && $y <= Row::MAX) {
-            $set[] = $this->getContentsOfCell(new Column($x), new Row($y));
-            $y ++;
-            $x ++;
-        }
-        return $set;
-    }
-    
-    /**
-     * @param Column $column
-     * @param Row $row
-     * @return array
-     */
-    private function getBackwardDiagonalFromCell(Column $column, Row $row)
-    {
-        $x = $column->getValue();
-        $y = $row->getValue();
-        
-        $set = [];
-        while ($x >= Column::MIN && $y <= Row::MAX) {
-            $set[] = $this->getContentsOfCell(new Column($x), new Row($y));
-            $y ++;
-            $x --;
-        }
-        
-        return $set;
     }
     
     /**
