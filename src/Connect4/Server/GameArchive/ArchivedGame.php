@@ -27,6 +27,11 @@ class ArchivedGame
     private $date;
     
     /**
+     * @var integer
+     */
+    private $id;
+    
+    /**
      * @param Board $board
      * @param string $redPlayerName
      * @param string $yellowPlayerName
@@ -47,7 +52,7 @@ class ArchivedGame
     /**
      * @return Board
      */
-    function getBoard()
+    public function getBoard()
     {
         return $this->board;
     }
@@ -55,7 +60,7 @@ class ArchivedGame
     /**
      * @return string
      */
-    function getRedPlayerName()
+    public function getRedPlayerName()
     {
         return $this->redPlayerName;
     }
@@ -63,7 +68,7 @@ class ArchivedGame
     /**
      * @return string
      */
-    function getYellowPlayerName()
+    public function getYellowPlayerName()
     {
         return $this->yellowPlayerName;
     }
@@ -71,9 +76,25 @@ class ArchivedGame
     /**
      * @return DateTime
      */
-    function getDate()
+    public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
 

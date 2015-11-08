@@ -1,3 +1,55 @@
-<html>
-    @todo
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Connect 4 - Game Archive</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/connect4.css" />
+  </head>
+  <body>
+    <h1>Connect 4 - Game Archive</h1>
+    <div id="archive">
+        
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
+    <script src='/connect4.js'></script>
+    <script id='game' type='text/ractive'>
+<div class="col-md-5">
+    <table>
+    {{#board}}
+        <tr>
+        {{#.}}
+            <td class="cell {{.}}"></td>
+        {{/}}
+        </tr>
+    {{/board}}
+    </table>
+</div>
+<div class="col-md-4">
+    <dl>
+        <dt>Date</dt>
+        <dd>{{date}}</dd>
+        <dt>Red Player</dt>
+        <dd>{{redPlayer}}</dd>
+        <dt>Yellow Player</dt>
+        <dd>{{yellowPlayer}}</dd>
+        <dt>End State</dt>
+        <dd>{{state}}</dd>
+    </dl>
+</div>
+<div class="col-md-3">
+    <ul>
+    {{#transcript}}
+        <li>{{.[0]}}: {{.[1]}}</li>
+    {{/transcript}}
+    </ul>
+</div>
+    </script>
+  </body>
 </html>

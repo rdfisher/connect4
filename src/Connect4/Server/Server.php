@@ -140,7 +140,7 @@ class Server
             }
         };
         
-        $stopGame = function() use ($server, $archive) {
+        $stopGame = function() use ($server) {
             $board = $server->getBoard();
             $redPlayerName = '';
             $yellowPlayerName = '';

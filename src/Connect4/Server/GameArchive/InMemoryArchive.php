@@ -25,8 +25,11 @@ class InMemoryArchive implements GameArchiveInterface
         $yellowPlayerName = '', 
         DateTime $date = null
     ) {
-        $this->archive[] = new ArchivedGame($board, $redPlayerName, $yellowPlayerName, $date);
-        return count($this->archive);
+        $archivedGame = new ArchivedGame($board, $redPlayerName, $yellowPlayerName, $date);
+        $this->archive[] = $archivedGame;
+        $id = count($this->archive);
+        $archivedGame->setId($id);
+        return $id;
     }
     
     /**

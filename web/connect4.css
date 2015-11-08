@@ -1,0 +1,18 @@
+.cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+}
+
+.red {
+    background-color: red;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.game {
+    border-bottom: 1px solid black;
+    padding: 10px;
+}

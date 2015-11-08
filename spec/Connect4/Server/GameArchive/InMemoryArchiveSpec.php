@@ -21,6 +21,7 @@ class InMemoryArchiveSpec extends ObjectBehavior
         $id = $this->archive($board, 'Jim', 'Bob', $date);
         $id->shouldBe(1);
         $archivedGame = new ArchivedGame($board->getWrappedObject(), 'Jim', 'Bob', $date->getWrappedObject());
+        $archivedGame->setId(1);
         $this->getArchive()->shouldBeLike([$archivedGame]);
         $this->getById(1)->shouldBeLike($archivedGame);
     }

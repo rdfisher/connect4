@@ -23,10 +23,10 @@ $socket->listen(1337, '0.0.0.0');
 $detailsSocket = new React\Socket\Server($loop);
 $http = new React\Http\Server($detailsSocket);
 
-$gameToArray = function(\Connect4\Server\GameArchive\ArchivedGame $game, $id) {
+$gameToArray = function(\Connect4\Server\GameArchive\ArchivedGame $game) {
     $board = $game->getBoard();
     $data = [
-        'id' => $id,
+        'id' => $game->getId(),
         'board' => [],
         'redPlayer' => $game->getRedPlayerName(),
         'yellowPlayer' => $game->getYellowPlayerName(),
@@ -68,12 +68,18 @@ $http->on('request', function ($request, $response) use ($server, $gameToArray) 
             }
             $games = [];
             foreach ($archivedGames as $i => $game) {
-                $games[] = $gameToArray($game, $id);
+                $games[] = $gameToArray($game, $i + 1);
             }
             $serve(json_encode($games), 'application/json');
             break;
         case '/':
             $serve(file_get_contents(__DIR__. '/../../web/index.html'), 'text/html');
+            break;
+        case '/connect4.js':
+            $serve(file_get_contents(__DIR__. '/../../web/connect4.js'), 'application/javascript');
+            break;
+        case '/connect4.css':
+            $serve(file_get_contents(__DIR__. '/../../web/connect4.css'), 'text/css');
             break;
         default:
             $serve('Not Found', 'text/html', 404);
