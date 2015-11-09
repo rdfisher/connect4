@@ -14,4 +14,5 @@ ADD . ./
 RUN composer dumpautoload
 
 EXPOSE 1337
+EXPOSE 8080
 CMD ["php", "src/scripts/server.php"]

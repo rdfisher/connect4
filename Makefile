@@ -8,7 +8,7 @@ run:
 	docker run --rm -it connect4 bash
 
 start: stop
-	docker run -d --name connect4 -p 1337:1337 connect4
+	docker run -d --name connect4 -p 1337:1337 -p 8080:8080 connect4
 
 stop:
 	@docker rm -vf connect4 ||:
