@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . '/../../vendor/autoload.php';
+date_default_timezone_set('UTC');
 
 use Connect4\Server\Server;
 
@@ -87,6 +88,6 @@ $http->on('request', function ($request, $response) use ($server, $gameToArray) 
     }
         
 });
-$detailsSocket->listen(8080);
+$detailsSocket->listen(8080, '0.0.0.0');
 
 $loop->run();
