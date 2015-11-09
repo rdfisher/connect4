@@ -15,11 +15,17 @@ class Server extends Command
     private $server;
     
     /**
+     * @var string
+     */
+    private $webroot;
+    
+    /**
      * @param GameServer $server
      */
-    public function __construct(GameServer $server = null)
+    public function __construct($webroot, GameServer $server = null)
     {
         $this->server = $server ?: new GameServer();
+        $this->webroot = $webroot;
         parent::__construct();
     }
     
@@ -54,6 +60,7 @@ class Server extends Command
         $socket->listen(1337, '0.0.0.0');
 
         //http server
+        $webroot = $this->webroot;
         $detailsSocket = new \React\Socket\Server($loop);
         $http = new \React\Http\Server($detailsSocket);
 
@@ -85,7 +92,7 @@ class Server extends Command
             return $data;
         };
 
-        $http->on('request', function ($request, $response) use ($server, $gameToArray) {
+        $http->on('request', function ($request, $response) use ($server, $webroot, $gameToArray) {
             $serve = function($content, $type, $code = 200) use ($response) {
                 $headers = array('Content-Type' => $type);
                 $response->writeHead($code, $headers);
@@ -107,13 +114,13 @@ class Server extends Command
                     $serve(json_encode($games), 'application/json');
                     break;
                 case '/':
-                    $serve(file_get_contents(__DIR__. '/../../web/index.html'), 'text/html');
+                    $serve(file_get_contents($webroot . '/index.html'), 'text/html');
                     break;
                 case '/connect4.js':
-                    $serve(file_get_contents(__DIR__. '/../../web/connect4.js'), 'application/javascript');
+                    $serve(file_get_contents($webroot . '/connect4.js'), 'application/javascript');
                     break;
                 case '/connect4.css':
-                    $serve(file_get_contents(__DIR__. '/../../web/connect4.css'), 'text/css');
+                    $serve(file_get_contents($webroot . '/connect4.css'), 'text/css');
                     break;
                 default:
                     $serve('Not Found', 'text/html', 404);
