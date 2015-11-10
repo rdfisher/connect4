@@ -57,8 +57,12 @@ class InMemoryArchive implements GameArchiveInterface
      */
     public function getArchiveSince($id)
     {
-        return array_filter($this->archive, function($v, $k) use ($id) {
-            return ($k + 1) > $id; 
-        }, ARRAY_FILTER_USE_BOTH);
+        $filteredArchive = [];
+        foreach ($this->archive as $key => $game) {
+            if (($key + 1) > $id) {
+                $filteredArchive[$key] = $game;
+            }
+        }
+        return $filteredArchive;
     }
 }
