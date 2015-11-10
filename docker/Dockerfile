@@ -15,4 +15,4 @@ RUN composer dumpautoload
 
 EXPOSE 1337
 EXPOSE 8080
-CMD ["php", "scripts/connect4.php connect4:server"]
+CMD ["php", "scripts/connect4.php", "connect4:server"]
